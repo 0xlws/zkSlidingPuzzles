@@ -1,0 +1,93 @@
+pragma circom 2.0.3;
+
+include "circomlib/poseidon.circom";
+include "circomlib/comparators.circom";
+// include "https://github.com/0xPARC/circom-secp256k1/blob/master/circuits/bigint.circom";
+
+
+template AbsSub (n){
+    signal input in[2];
+    signal output out;
+    signal switch;
+    var shift = n;
+
+    var a = shift + in[0] - in[1];
+    
+    switch <-- a > shift? a - shift : shift - a;
+    
+    out <== switch;
+}
+
+template Example () {
+    signal input target[2];
+    signal input blank[2];
+    signal input previous[2];
+
+
+    // check if within bounds (4 x 4)
+    component getZero[4];
+    component letThree[4];
+
+    var i;
+    var j = 0;
+    for(i=0;i<4;i+=2){
+        getZero[i] = GreaterEqThan(32);
+        getZero[i].in[0] <== target[j];
+        getZero[i].in[1] <== 0;
+
+        getZero[i].out === 1;
+        getZero[i+1] = GreaterEqThan(32);
+        getZero[i+1].in[0] <== blank[j];
+        getZero[i+1].in[1] <== 0;
+
+        getZero[i+1].out === 1;
+        letThree[i] = LessEqThan(32);
+        letThree[i].in[0] <== target[j];
+        letThree[i].in[1] <== 3;
+
+        letThree[i].out === 1;
+        letThree[i+1] = LessEqThan(32);
+        letThree[i+1].in[0] <== blank[j];
+        letThree[i+1].in[1] <== 3;
+
+        letThree[i+1].out === 1;
+
+        j++;
+    }
+    
+    // check if is neighbour
+    component abs[2];
+    for(i=0;i<2;i++){
+        abs[i] = AbsSub(10);
+        abs[i].in[0] <== target[i];
+        abs[i].in[1] <== blank[i];
+    }
+
+    component eq = IsEqual();
+        eq.in[0] <== abs[0].out + abs[1].out;
+        eq.in[1] <== 1;
+
+        eq.out === 1;
+
+    // check if not previous move
+    component eq1[3];
+    for(i=0;i<2;i++){
+        eq1[i] = IsEqual();
+        eq1[i].in[0] <== target[i];
+        eq1[i].in[1] <== previous[i];
+    }
+
+    eq1[2] = IsEqual();
+    eq1[2].in[0] <== eq1[0].out + eq1[1].out;
+    eq1[2].in[1] <== 2;
+
+    eq1[2].out === 0;
+}
+
+component main  = Example();
+
+/* INPUT = {
+    "target" : [3,2],
+    "blank" : [3,3],
+    "previous" : [3,2]
+} */

@@ -1,0 +1,15 @@
+{
+  "name": "zk15Circuits",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "script":"./script.sh",
+    "oneToFifteen:circuit": "./oneToFifteen/oneToFifteen.sh",
+    "move:circuit": "./move/move.sh"
+  },
+  "dependencies": {
+    "circomlib": "^2.0.3",
+    "typescript": "^4.7.2"
+  }
+}
