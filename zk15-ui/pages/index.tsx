@@ -229,7 +229,15 @@ const Home: NextPage = () => {
       setConnected(false);
       return;
     }
-
+    const provider = (await detectEthereumProvider()) as any;
+    await provider.request({ method: "eth_requestAccounts" });
+    const ethersProvider = new providers.Web3Provider(provider);
+    const _signer = ethersProvider.getSigner();
+    const contract = new Contract(
+      "0x73Bad55a239234a56edba9668473537223126716",
+      zk15.abi,
+      _signer
+    );
     // console.log({ finalSteps });
     if (finalSteps == 0) {
       finalSteps = 1;
@@ -245,7 +253,7 @@ const Home: NextPage = () => {
     // const provider = new providers.JsonRpcProvider(`${cfg.rinkebyUrl}`);
     // const signer = new Wallet(`${cfg.pKey}`, provider);
 
-    const contractOwner = contract.connect(signer);
+
     if (shuffleCount == 0) {
       return;
     }
