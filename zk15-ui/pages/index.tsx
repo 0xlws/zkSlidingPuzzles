@@ -534,11 +534,11 @@ const Home: NextPage = () => {
     };
 
     p.setup = () => {
-      let dancing = p.loadFont("fonts/Dancing script.ttf");
-      let medici = p.loadFont("fonts/Medici Text.ttf");
-      let parisienne = p.loadFont("fonts/Parisienne-Regular.ttf");
+      // let dancing = p.loadFont("fonts/Dancing script.ttf");
+      // let medici = p.loadFont("fonts/Medici Text.ttf");
+      // let parisienne = p.loadFont("fonts/Parisienne-Regular.ttf");
       let rise = p.loadFont("fonts/Rise of Kingdom.ttf");
-      let scriptina = p.loadFont("fonts/SCRIPTIN.ttf");
+      // let scriptina = p.loadFont("fonts/SCRIPTIN.ttf");
       p.textFont(rise);
       p.textSize(50);
       p.textAlign(p.CENTER, p.CENTER);
