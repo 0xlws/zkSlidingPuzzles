@@ -287,7 +287,7 @@ const Home: NextPage = () => {
         window.alert("Verification OK");
         const { proofList, a, b, c } = getSolidityProofArray(proof);
         window.alert("Minting NFT...");
-        let call = await contractOwner.verifyProof(
+        let call = await contract.verifyProof(
           a,
           b,
           c,
